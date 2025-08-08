@@ -11,12 +11,16 @@ static uint16_t set_pwm_pulse(uint16_t period_cycle, float cycletime,
 
 int main() {
     stdio_init_all();
-    const uint8_t M1_IN1 = 25;
+    const uint8_t M1_IN1 = 0;
     const uint8_t M1_IN2 = 1;
-    const uint8_t S1 = 2;
-    const uint8_t S2 = 3;
+    const uint8_t M2_IN1 = 2;
+    const uint8_t M2_IN2 = 3;
+    const uint8_t M3_IN1 = 4;
+    const uint8_t M3_IN2 = 5;
+    const uint8_t S1 = 11;
+    const uint8_t S2 = 15;
 
-    const uint8_t SURVO = 14;
+    const uint8_t SURVO = 6;
 
     // モーター初期化
     gpio_init(M1_IN1);
@@ -25,6 +29,20 @@ int main() {
     gpio_set_dir(M1_IN2, GPIO_OUT);
     gpio_put(M1_IN1, 0);
     gpio_put(M1_IN2, 0);
+
+    gpio_init(M2_IN1);
+    gpio_init(M2_IN2);
+    gpio_set_dir(M2_IN1, GPIO_OUT);
+    gpio_set_dir(M2_IN2, GPIO_OUT);
+    gpio_put(M2_IN1, 0);
+    gpio_put(M2_IN2, 0);
+
+    gpio_init(M3_IN1);
+    gpio_init(M3_IN2);
+    gpio_set_dir(M3_IN1, GPIO_OUT);
+    gpio_set_dir(M3_IN2, GPIO_OUT);
+    gpio_put(M3_IN1, 0);
+    gpio_put(M3_IN2, 0);
 
     // サーボモータ初期化
     static uint16_t PERIOD_CYCLE = 25000;
