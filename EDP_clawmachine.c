@@ -72,14 +72,14 @@ int main() {
     gpio_pull_up(S2);
 
     while (true) {
-        if (!gpio_get(S2)) {
+        if (!gpio_get(S1)) {
             gpio_put(M1_IN1, 1);
             gpio_put(M1_IN2, 0);
             pwm_set_gpio_level(SURVO, pulse1);
             sleep_ms(500);
         } else {
             gpio_put(M1_IN1, 0);
-            gpio_put(M1_IN2, 1);
+            gpio_put(M1_IN2, 0);
             pwm_set_gpio_level(SURVO, pulse2);
             sleep_ms(500);
         }
