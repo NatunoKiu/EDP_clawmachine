@@ -1,13 +1,15 @@
 #include <stdio.h>
 
+#include "hardware/pwm.h"
 #include "pico/stdlib.h"
 
 int main() {
     stdio_init_all();
-    const uint8_t M1_IN1 = 0;
+    const uint8_t M1_IN1 = 25;
     const uint8_t M1_IN2 = 1;
     const uint8_t S1 = 2;
     const uint8_t S2 = 3;
+    const uint8_t SURVO = 14;
 
     // モーター初期化
     gpio_init(M1_IN1);
@@ -16,6 +18,20 @@ int main() {
     gpio_set_dir(M1_IN2, GPIO_OUT);
     gpio_put(M1_IN1, 0);
     gpio_put(M1_IN2, 0);
+
+    // サーボモータ初期化
+    static uint16_t PERIOD_CYCLE = 25000;
+    static float CYCLETIME = 20.0F;
+    static float PULSE_WIDTH_DEG_M60 = 0.82F;
+    static float PULSE_WIDTH_DEG_P60 = 2.10F;
+
+    gpio_set_function(SURVO, GPIO_FUNC_PWM);
+    uint slice_num = pwm_gpio_to_slice_num(SURVO);
+    // 分解能を指定
+    pwm_set_wrap(slice_num, 25000 - 1);
+    // 分周比を指定
+    pwm_set_clkdiv(slice_num, 100.0f);
+    pwm_set_enabled(slice_num, true);
 
     // スイッチ初期化
     gpio_init(S1);
@@ -27,15 +43,9 @@ int main() {
 
     while (true) {
         if (!gpio_get(S2)) {
-            while (true) {
-                if (!gpio_get(S1)) {
-                    gpio_put(M1_IN1, 1);
-                    gpio_put(M1_IN2, 0);
-                } else {
-                    gpio_put(M1_IN1, 0);
-                    gpio_put(M1_IN2, 1);
-                }
-            }
+            // 正転
+        } else {
+            // 逆転
         }
     }
     return 0;
