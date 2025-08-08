@@ -26,7 +26,7 @@ int main() {
     gpio_put(M1_IN1, 0);
     gpio_put(M1_IN2, 0);
 
-    // サーボモータ
+    // サーボモータ初期化
     static uint16_t PERIOD_CYCLE = 25000;
     static float CYCLETIME = 20.0F;
     static float PULSE_WIDTH_DEG_M60 = 0.82F;
