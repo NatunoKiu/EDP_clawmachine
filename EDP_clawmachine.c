@@ -71,17 +71,32 @@ int main() {
     gpio_pull_up(S1);
     gpio_pull_up(S2);
 
+    // フラグ初期化
+    bool s1_first_press = true;
+    bool s2_first_press = true;
+
     while (true) {
-        if (!gpio_get(S1)) {
-            gpio_put(M1_IN1, 1);
-            gpio_put(M1_IN2, 0);
-            pwm_set_gpio_level(SURVO, pulse1);
-            sleep_ms(500);
-        } else {
-            gpio_put(M1_IN1, 0);
-            gpio_put(M1_IN2, 0);
-            pwm_set_gpio_level(SURVO, pulse2);
-            sleep_ms(500);
+        // S1を押している間だけ、右へ動く
+        if (!gpio_get(S1) && s1_first_press) {
+            s1_first_press = false;
+            while (true) {
+                gpio_put(M1_IN1, 1);
+                gpio_put(M1_IN2, 0);
+                if (!gpio_get(S1) == false) {
+                    break;
+                }
+            }
+        }
+        // S2を押している間だけ、奥へ動く
+        if (!gpio_get(S2) && s2_first_press) {
+            s2_first_press = false;
+            while (true) {
+                gpio_put(M2_IN1, 1);
+                gpio_put(M2_IN2, 0);
+                if (!gpio_get(S2) == false) {
+                    break;
+                }
+            }
         }
     }
     return 0;
