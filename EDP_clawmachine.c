@@ -97,6 +97,31 @@ int main() {
                     break;
                 }
             }
+            // アームを開く
+            pwm_set_gpio_level(SURVO, pulse1);
+            sleep_ms(1500);
+            // アームを下げる
+            gpio_put(M3_IN1, 1);
+            gpio_put(M3_IN2, 0);
+            sleep_ms(3000);
+            // アームを閉じる
+            pwm_set_gpio_level(SURVO, pulse2);
+            sleep_ms(1500);
+            // アームを上げる
+            gpio_put(M3_IN1, 0);
+            gpio_put(M3_IN2, 1);
+            sleep_ms(3000);
+            // 手前へ動く
+            gpio_put(M2_IN1, 0);
+            gpio_put(M2_IN2, 1);
+            sleep_ms(2000);
+            // 左へ動く
+            gpio_put(M1_IN1, 0);
+            gpio_put(M1_IN2, 1);
+            sleep_ms(2000);
+            // アームを開く
+            pwm_set_gpio_level(SURVO, pulse1);
+            sleep_ms(1500);
         }
     }
     return 0;
