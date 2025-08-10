@@ -19,6 +19,7 @@ int main() {
     const uint8_t M3_IN2 = 5;
     const uint8_t S1 = 11;
     const uint8_t S2 = 15;
+    const uint8_t S3 = 16;
 
     const uint8_t SURVO = 6;
 
@@ -66,63 +67,69 @@ int main() {
     // スイッチ初期化
     gpio_init(S1);
     gpio_init(S2);
+    gpio_init(S3);
     gpio_set_dir(S1, GPIO_IN);
     gpio_set_dir(S2, GPIO_IN);
+    gpio_set_dir(S3, GPIO_IN);
     gpio_pull_up(S1);
     gpio_pull_up(S2);
+    gpio_pull_up(S3);
 
-    // フラグ初期化
-    bool s1_first_press = true;
-    bool s2_first_press = true;
-
+    bool s1_pressed;
+    bool s2_pressed;
+    bool s3_pressed;
+    bool s1_pre_pressed = false;
+    bool s2_pre_pressed = false;
     while (true) {
-        // S1を押している間だけ、右へ動く
-        if (!gpio_get(S1) && s1_first_press) {
-            s1_first_press = false;
-            while (true) {
-                gpio_put(M1_IN1, 1);
-                gpio_put(M1_IN2, 0);
-                if (!gpio_get(S1) == false) {
-                    break;
-                }
-            }
-        }
-        // S2を押している間だけ、奥へ動く
-        if (!gpio_get(S2) && s2_first_press) {
-            s2_first_press = false;
-            while (true) {
-                gpio_put(M2_IN1, 1);
-                gpio_put(M2_IN2, 0);
-                if (!gpio_get(S2) == false) {
-                    break;
-                }
-            }
-            // アームを開く
-            pwm_set_gpio_level(SURVO, pulse1);
-            sleep_ms(1500);
-            // アームを下げる
-            gpio_put(M3_IN1, 1);
-            gpio_put(M3_IN2, 0);
-            sleep_ms(3000);
-            // アームを閉じる
-            pwm_set_gpio_level(SURVO, pulse2);
-            sleep_ms(1500);
-            // アームを上げる
-            gpio_put(M3_IN1, 0);
-            gpio_put(M3_IN2, 1);
-            sleep_ms(3000);
-            // 手前へ動く
-            gpio_put(M2_IN1, 0);
+        s1_pressed = !gpio_get(S1);
+        s2_pressed = !gpio_get(S2);
+        s3_pressed = !gpio_get(S3);
+
+        if (s1_pressed) {
+            // M1正転
+            gpio_put(M1_IN1, 1);
+            gpio_put(M1_IN2, 0);
+            // M2停止
+            gpio_put(M2_IN1, 1);
             gpio_put(M2_IN2, 1);
-            sleep_ms(2000);
-            // 左へ動く
+        } else if (s2_pressed) {
+            // M1停止
+            gpio_put(M1_IN1, 1);
+            gpio_put(M1_IN2, 1);
+            // M2正転
+            gpio_put(M2_IN1, 1);
+            gpio_put(M2_IN2, 0);
+        } else if (s3_pressed) {
+            // M1逆転
             gpio_put(M1_IN1, 0);
             gpio_put(M1_IN2, 1);
-            sleep_ms(2000);
-            // アームを開く
-            pwm_set_gpio_level(SURVO, pulse1);
-            sleep_ms(1500);
+            // M2逆転
+            gpio_put(M2_IN1, 0);
+            gpio_put(M2_IN2, 1);
+        } else if (!s2_pressed && s2_pre_pressed) {
+            // M2停止
+            gpio_put(M2_IN1, 1);
+            gpio_put(M2_IN2, 1);
+            sleep_ms(1000);
+            // M3正転
+            gpio_put(M3_IN1, 1);
+            gpio_put(M3_IN2, 0);
+            sleep_ms(3890);
+            // M3停止
+            gpio_put(M3_IN1, 1);
+            gpio_put(M3_IN2, 1);
+        } else {
+            // M1停止
+            gpio_put(M1_IN1, 1);
+            gpio_put(M1_IN2, 1);
+            // M2停止
+            gpio_put(M2_IN1, 1);
+            gpio_put(M2_IN2, 1);
         }
+
+        s1_pre_pressed = s1_pressed;
+        s2_pre_pressed = s2_pressed;
+        sleep_ms(100);
     }
     return 0;
 }
