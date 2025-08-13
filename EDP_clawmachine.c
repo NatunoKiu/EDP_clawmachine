@@ -153,6 +153,10 @@ int main() {
                 }
                 if (senser3_pressed && !senser3_pre_pressed) {
                     senser3_home = true;
+                    sleep_ms(1000);
+                    gpio_put(M3_IN1, 1);
+                    gpio_put(M3_IN2, 0);
+                    sleep_ms(700);
                     // M3停止
                     gpio_put(M3_IN1, 1);
                     gpio_put(M3_IN2, 1);
@@ -160,6 +164,10 @@ int main() {
                 }
                 if (senser2_pressed && !senser2_pre_pressed) {
                     senser2_home = true;
+                    sleep_ms(1000);
+                    gpio_put(M2_IN1, 1);
+                    gpio_put(M2_IN2, 0);
+                    sleep_ms(400);
                     // M2停止
                     gpio_put(M2_IN1, 1);
                     gpio_put(M2_IN2, 1);
@@ -167,6 +175,10 @@ int main() {
                 }
                 if (senser1_pressed && !senser1_pre_pressed) {
                     senser1_home = true;
+                    sleep_ms(1000);
+                    gpio_put(M1_IN1, 1);
+                    gpio_put(M1_IN2, 0);
+                    sleep_ms(700);
                     // M1停止
                     gpio_put(M1_IN1, 1);
                     gpio_put(M1_IN2, 1);
