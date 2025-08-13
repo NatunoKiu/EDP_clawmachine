@@ -117,7 +117,7 @@ int main() {
             // 下に動く（M3正転）
             gpio_put(M3_IN1, 1);
             gpio_put(M3_IN2, 0);
-            sleep_ms(3890);
+            sleep_ms(3690);
             gpio_put(M3_IN1, 1);
             gpio_put(M3_IN2, 1);
             sleep_ms(1000);
@@ -160,7 +160,7 @@ int main() {
                     // M3停止
                     gpio_put(M3_IN1, 1);
                     gpio_put(M3_IN2, 1);
-                    sleep_ms(2000);
+                    sleep_ms(1000);
                 }
                 if (senser2_pressed && !senser2_pre_pressed) {
                     senser2_home = true;
@@ -171,7 +171,7 @@ int main() {
                     // M2停止
                     gpio_put(M2_IN1, 1);
                     gpio_put(M2_IN2, 1);
-                    sleep_ms(2000);
+                    sleep_ms(1000);
                 }
                 if (senser1_pressed && !senser1_pre_pressed) {
                     senser1_home = true;
@@ -182,7 +182,7 @@ int main() {
                     // M1停止
                     gpio_put(M1_IN1, 1);
                     gpio_put(M1_IN2, 1);
-                    sleep_ms(2000);
+                    sleep_ms(1000);
                 }
                 senser1_pre_pressed = senser1_pressed;
                 senser2_pre_pressed = senser2_pressed;
